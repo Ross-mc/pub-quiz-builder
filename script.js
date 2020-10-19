@@ -1,53 +1,80 @@
+
+
+const quizzes = [];
+
+
 $(function(){
 
-    //at this stage, we can create a quiz, store the title and store questions and answers. We can finish the quiz and return to the home page. But it does not display previous made quiz
-    //when we start a new quiz, data from the old quiz is still showing. I think this has something to do with the way i've set up quiz. It may be better to have the quiz as an object
-    //and to have an array of quizzes perhaps...
+    //at this stage, the user can create multiple quizzes and save them.
+    // the next step is to add functionality to edit and play quizzes.
+    //to do list includes saving the quizzes to a database and allowing different types of questions such as true/false or multiple choice
 
-    class Quiz {
-        constructor(title){
-            this.title = title;
-            this.questionArr = [];
-        };
-    };
+    
 
-    let frontPageElements = $("#home-header, #quiz-starter");
-    let userTitle = $("#user-title");
-    let quizQuestion = $(".quiz-question-builder");
+    const frontPageElements = $("#home-header, #quiz-starter, #user-created-quizzes");
+    const userTitle = $("#user-title");
+
+
+    
+
     
 
 
     function createQuiz(quizTitle){
-        const quiz = new Quiz(quizTitle);
+        
+        class Quiz {
+            constructor(title){
+                this.answerArr = [];
+                this.questionArr = [];
+                this.title = title;
+
+            };
+        };
+
+        $("#user-created-quizzes").empty();
+        
+        
+        quiz = new Quiz();
+        quiz.title = quizTitle;
         let questionNumber = 1;
         $("body").append(`
-            <div class='quiz-question-builder'>
+            <div class="quiz-question-builder">
                 <h3 class="quiz-title">${quiz.title}</h3>
                 <h4 class="question-number">Question Number ${questionNumber}</h4>
                 <input type="text" placeholder="Enter your question" class="user-input" id="user-question">
                 <input type="text" placeholder="Enter the correct answer" class="user-input" id="user-answer">
                 <button class="submit-btn" id="submit-question" type="submit">Submit question</button>                
             </div>`)
-
-
-
-        
-        
+            
 
         $("#submit-question").on('click', (function(){            
+            
             let question = $("#user-question").val();
             let answer = $("#user-answer").val();     
-            quiz.questionArr.push({ [question]: answer});
+            quiz.questionArr.push(question);
+            quiz.answerArr.push(answer);
             questionNumber++;
             $(".question-number").html(`Question Number ${questionNumber}`);
             $(".user-input").val("");
-            console.log(quiz);
             if (questionNumber === 2){
                 $(".submit-btn").after('<button class="finish-btn" id="finish-quiz" type="submit">Finish quiz</button>')
                 $(".finish-btn").click(function(){
+                    $(".finish-btn").remove();
+                    quizzes.push(quiz);
                     $(".quiz-question-builder").fadeOut(400, function(){
+                        $(".quiz-question-builder").remove();
+                        for (let i = 0; i<quizzes.length; i++){
+                            $("#user-created-quizzes").append(`
+                                <div class="quiz-card" id="${quizzes[i].title}">
+                                    <h3 class="quiz-title">${quizzes[i].title}</h3>
+                                    <h4 class="num-questions">${quizzes[i].questionArr.length} question(s)</h4>
+                                    <button class="completed-btn edit-quiz">Edit Quiz</button>
+                                    <button class="completed-btn play-quiz">Play Quiz</button>
+                                </div>
+                                `)
+                        };
                         frontPageElements.fadeIn(400);
-                    })
+                    });
                 });
             };
             

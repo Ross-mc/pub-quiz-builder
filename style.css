@@ -4,6 +4,7 @@ body{
     margin: 0;
     padding: 0;
     text-align: center;
+    position: relative;
 }
 
 header{
@@ -20,6 +21,7 @@ header{
     min-height: 200px;
     padding: 20px;
     display: block;
+    position: relative;
 }
 
 @media (min-width: 900px){
@@ -73,3 +75,8 @@ header{
     border: 2px solid #333333;
     border-radius: 10px;
 }
+
+#user-created-quizzes{
+    display: none;
+}
+
