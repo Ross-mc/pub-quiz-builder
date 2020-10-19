@@ -5,8 +5,7 @@ const quizzes = [];
 
 $(function(){
 
-    //at this stage, the user can create multiple quizzes and save them. The user can play submitted quizzes. A record of the score is kept. Answers are checked against the stored answers. Answers are sanitised with lowercase and removal of whitespace
-    // the next step is to add functionality to edit quizzes.
+    //user can now fully edit quizzes, including answers and questions.
     //to do list includes saving the quizzes to a database and allowing different types of questions such as true/false or multiple choice
 
     
@@ -56,7 +55,7 @@ $(function(){
             // take the user's input for the question and answer
 
             let question = $("#user-question").val();
-            question.replace(/?/g,'')
+            question.replace("?", "")
             let answer = $("#user-answer").val();     
             quiz.questionArr.push(question);//I need to add form validation here
             quiz.answerArr.push(answer);//and form validation here
@@ -66,10 +65,10 @@ $(function(){
 
             if (questionNumber === 2){//after at least one question has been submit, add the finish quiz button
 
-                $(".submit-btn").after('<button class="finish-btn" id="finish-quiz" type="submit">Finish quiz</button>')
-                $(".finish-btn").click(function(){
+                $("#submit-question").after('<button class="finish-btn" id="finish-quiz" type="submit">Finish quiz</button>')
+                $("#finish-quiz").click(function(){
 
-                    $(".finish-btn").remove();//remove the finish button to stop it displaying on home page
+                    $("#finish-quiz").remove();//remove the finish button to stop it displaying on home page
                     quizzes.push(quiz);//save the user created quiz to an array of user created quizzes
                     $(".quiz-question-builder").fadeOut(400, function(){
 
@@ -86,7 +85,68 @@ $(function(){
                                 `)//This for loop creates a new quiz card for each user created quiz in the current session.
                         };
                         frontPageElements.fadeIn(400);
+                                                   
 
+                        $(".edit-quiz").click(function(){
+                            
+                            let clickedID = $(this).attr("id").replace(/\D+/g,'');
+                            let currentQuestion = 0;
+
+                            $("body").append(`
+                            <div class="game-on quiz-card" id="edit-quiz">
+                                <h3 class="quiz-title">${quizzes[clickedID].title}</h3>
+                                <h4 class="question-number">Question Number ${currentQuestion+1}</h4>
+                                <input type="text" value="${quizzes[clickedID].questionArr[currentQuestion]}" class="user-input" id="edit-question">
+                                <input type="text" value="${quizzes[clickedID].answerArr[currentQuestion]}" class="user-input" id="edit-answer">
+                                <button class="submit-btn" id="submit-edited-question" type="submit">Save question</button>
+                                <button class="finish-btn" id="save-quiz" type="submit">Save quiz</button>                
+                            </div>`);
+
+                            frontPageElements.fadeOut(400, function(){
+                                $(".game-on").fadeIn(400).css('display', '');
+                            })
+
+                            $("#submit-edited-question").click(function(){
+                                let question = $("#edit-question").val();
+                                question.replace("?", "")
+                                let answer = $("#edit-answer").val();     
+                                quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
+                                quizzes[clickedID].answerArr[currentQuestion] = answer;//I need to add form validation here
+                                currentQuestion++;
+                                $(".question-number").html(`Question Number ${currentQuestion+1}`);//updates the question number
+                                $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);                               
+                                $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+                                
+                                if (currentQuestion === quizzes[clickedID].questionArr.length){
+                                    $(".game-on").empty().append(`
+                                    <p class="user-score">You have finished editing the quizz</p>
+                                    <button class="guess-btn" id="return-home" type="submit">Return Home</button>`)
+                                    $("#return-home").click(function(){
+                                        $(".game-on").fadeOut(400, function(){
+                                            frontPageElements.fadeIn(400);
+                                            $(this).remove();
+                                        })
+                                    });
+                                }
+                            });
+
+                            $("#save-quiz").click(function(){
+                                let question = $("#edit-question").val();
+                                question.replace("?", "")
+                                let answer = $("#edit-answer").val();     
+                                quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
+                                quizzes[clickedID].answerArr[currentQuestion] = answer;//I need to add form validation here
+                                currentQuestion++;
+                                $(".question-number").html(`Question Number ${currentQuestion+1}`);//updates the question number
+                                $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);                               
+                                $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+                                $(".game-on").fadeOut(400, function(){
+                                    $(this).remove();
+                                    frontPageElements.fadeIn(400);
+                                })
+                            });
+                        });
+                        
                         $(".play-quiz").click(function(){
                             let clickedID = $(this).attr("id").replace(/\D+/g,'');
 
