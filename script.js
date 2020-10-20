@@ -44,8 +44,8 @@ $(function(){
             <div class="quiz-question-builder">
                 <h3 class="quiz-title">${quiz.title}</h3>
                 <h4 class="question-number">Question Number ${questionNumber}</h4>
-                <input type="text" placeholder="Enter your question" class="user-input" id="user-question">
-                <input type="text" placeholder="Enter the correct answer" class="user-input" id="user-answer">
+                <input type="text" placeholder="Enter your question" class="user-input" id="user-question" minlength="1">
+                <input type="text" placeholder="Enter the correct answer" class="user-input" id="user-answer" minlength="1">
                 <button class="submit-btn" id="submit-question" type="submit">Submit question</button>                
             </div>`)
             
@@ -56,7 +56,18 @@ $(function(){
 
             let question = $("#user-question").val();
             question.replace("?", "")
-            let answer = $("#user-answer").val();     
+            let answer = $("#user-answer").val();
+
+            if (question.length < 1){
+                alert("Please enter a question");
+                return
+            }
+
+            if (answer.length < 1){
+                alert("Please enter an answer")
+                return
+            }
+
             quiz.questionArr.push(question);//I need to add form validation here
             quiz.answerArr.push(answer);//and form validation here
             questionNumber++;
@@ -98,8 +109,8 @@ $(function(){
                             <div class="game-on quiz-card" id="edit-quiz">
                                 <h3 class="quiz-title">${quizzes[clickedID].title}</h3>
                                 <h4 class="question-number">Question Number ${currentQuestion+1}</h4>
-                                <input type="text" value="${quizzes[clickedID].questionArr[currentQuestion]}" class="user-input" id="edit-question">
-                                <input type="text" value="${quizzes[clickedID].answerArr[currentQuestion]}" class="user-input" id="edit-answer">
+                                <input type="text" value="${quizzes[clickedID].questionArr[currentQuestion]}" class="user-input" id="edit-question" minlength="1">
+                                <input type="text" value="${quizzes[clickedID].answerArr[currentQuestion]}" class="user-input" id="edit-answer" minlength="1">
                                 <button class="move-btn" id="move-right"><i class="fas fa-angle-right"></i></button>
                                 <button class="move-btn" id="move-left"><i class="fas fa-angle-left"></i></button>
                                 <button class="submit-btn" id="submit-edited-question" type="submit">Save question</button>
@@ -132,6 +143,16 @@ $(function(){
                                 let question = $("#edit-question").val();
                                 question.replace("?", "")
                                 let answer = $("#edit-answer").val();
+
+                                if (question.length < 1){
+                                    alert("Please enter a question");
+                                    return
+                                }
+                    
+                                if (answer.length < 1){
+                                    alert("Please enter an answer")
+                                    return
+                                }
                                 
                                 if (addBtnClicked === false){
                                     quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
@@ -199,7 +220,18 @@ $(function(){
                             $("#save-quiz").click(function(){
                                 let question = $("#edit-question").val();
                                 question.replace("?", "")
-                                let answer = $("#edit-answer").val();     
+                                let answer = $("#edit-answer").val();
+                                
+                                if (question.length < 1){
+                                    alert("Please enter a question");
+                                    return
+                                }
+                    
+                                if (answer.length < 1){
+                                    alert("Please enter an answer")
+                                    return
+                                }
+                                
                                 quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
                                 quizzes[clickedID].answerArr[currentQuestion] = answer;//I need to add form validation here
                                 currentQuestion++;
@@ -284,6 +316,11 @@ $(function(){
 
     $("#start-build-submit").click(function(){
 
+        if (userTitle.val().length < 1){
+            alert("Please enter a quiz title");
+            return
+        };
+        
         createQuiz(userTitle.val());
         userTitle.val('');
         frontPageElements.fadeOut(400, function(){    
