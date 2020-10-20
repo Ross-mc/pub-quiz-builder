@@ -78,7 +78,7 @@ $(function(){
                             $("#user-created-quizzes").append(`
                                 <div class="quiz-card" id="${quizzes[i].title}">
                                     <h3 class="quiz-title">${quizzes[i].title}</h3>
-                                    <h4 class="num-questions">${quizzes[i].questionArr.length} question(s)</h4>
+                                    <h4 class="num-questions" id="${i}-questions">${quizzes[i].questionArr.length} question(s)</h4>
                                     <button class="completed-btn edit-quiz" id="${i}-edit">Edit Quiz</button>
                                     <button class="completed-btn play-quiz" id="${i}-play">Play Quiz</button>
                                 </div>
@@ -86,11 +86,13 @@ $(function(){
                         };
                         frontPageElements.fadeIn(400);
                                                    
-
+                        // function for editing the quiz
                         $(".edit-quiz").click(function(){
                             
                             let clickedID = $(this).attr("id").replace(/\D+/g,'');
                             let currentQuestion = 0;
+
+                            let addBtnClicked = false;
 
                             $("body").append(`
                             <div class="game-on quiz-card" id="edit-quiz">
@@ -98,37 +100,101 @@ $(function(){
                                 <h4 class="question-number">Question Number ${currentQuestion+1}</h4>
                                 <input type="text" value="${quizzes[clickedID].questionArr[currentQuestion]}" class="user-input" id="edit-question">
                                 <input type="text" value="${quizzes[clickedID].answerArr[currentQuestion]}" class="user-input" id="edit-answer">
+                                <button class="move-btn" id="move-right"><i class="fas fa-angle-right"></i></button>
+                                <button class="move-btn" id="move-left"><i class="fas fa-angle-left"></i></button>
                                 <button class="submit-btn" id="submit-edited-question" type="submit">Save question</button>
+                                <button class="add-btn" id="add-new-question" type="submit">Add new question</button>
                                 <button class="finish-btn" id="save-quiz" type="submit">Save quiz</button>                
                             </div>`);
 
+                            //function for moving between questions in the quiz
+
+                            
+
                             frontPageElements.fadeOut(400, function(){
                                 $(".game-on").fadeIn(400).css('display', '');
-                            })
+                            });
 
+                            $("#add-new-question").click(function(){
+                                currentQuestion++;
+                                $(".question-number").html(`Question Number ${currentQuestion+1}`);
+                                $("#edit-question").val("");                           
+                                $("#edit-answer").val("");
+
+                                addBtnClicked = true;
+
+                                
+
+                                //arr.splice(index, 0, item);
+                            });
+                            // once the user is satisified with edits, by clicking submit it saves the edited question or answer
                             $("#submit-edited-question").click(function(){
                                 let question = $("#edit-question").val();
                                 question.replace("?", "")
-                                let answer = $("#edit-answer").val();     
-                                quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
-                                quizzes[clickedID].answerArr[currentQuestion] = answer;//I need to add form validation here
-                                currentQuestion++;
-                                $(".question-number").html(`Question Number ${currentQuestion+1}`);//updates the question number
-                                $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);                               
-                                $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+                                let answer = $("#edit-answer").val();
                                 
-                                if (currentQuestion === quizzes[clickedID].questionArr.length){
-                                    $(".game-on").empty().append(`
-                                    <p class="user-score">You have finished editing the quizz</p>
-                                    <button class="guess-btn" id="return-home" type="submit">Return Home</button>`)
-                                    $("#return-home").click(function(){
-                                        $(".game-on").fadeOut(400, function(){
-                                            frontPageElements.fadeIn(400);
-                                            $(this).remove();
-                                        })
-                                    });
-                                }
+                                if (addBtnClicked === false){
+                                    quizzes[clickedID].questionArr[currentQuestion] = question;//I need to add form validation here
+                                    quizzes[clickedID].answerArr[currentQuestion] = answer;//I need to add form validation here
+                                    currentQuestion++;
+                                    $(".question-number").html(`Question Number ${currentQuestion+1}`);//updates the question number
+                                    $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);//refreshes the quiz to the next questions                               
+                                    $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+                                    
+                                    if (currentQuestion === quizzes[clickedID].questionArr.length){
+                                        $(".game-on").empty().append(`
+                                        <p class="user-score">You have finished editing the quiz</p>
+                                        <button class="guess-btn" id="return-home" type="submit">Return Home</button>`)
+                                        $("#return-home").click(function(){
+                                            $(".game-on").fadeOut(400, function(){
+                                                frontPageElements.fadeIn(400);
+                                                $(this).remove();
+                                            })
+                                        });
+                                    }
+                                } else {
+                                    quizzes[clickedID].questionArr.splice(currentQuestion, 0, question);
+                                    quizzes[clickedID].answerArr.splice(currentQuestion, 0, answer);
+                                    currentQuestion++;
+                                    $(".question-number").html(`Question Number ${currentQuestion+1}`);
+                                    $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);                            
+                                    $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+                                    $(`#${clickedID}-questions`).html(`${quizzes[clickedID].questionArr.length} question(s)`)
+                                } 
+
+                                
                             });
+
+                            
+
+                            $(".move-btn").click(function(){
+                                let id = this.id;                     
+                                
+                                if (id === "move-left"){
+                                    if (currentQuestion===0){
+                                        alert('You are at the beginning of the quiz')
+                                        return;
+                                    } else{
+                                        currentQuestion--;
+                                    }
+
+                                } else {
+                                    if (currentQuestion === quizzes[clickedID].questionArr.length-1){
+                                        alert('You are at the end of the quiz')
+                                        return
+                                    } else{
+                                        currentQuestion++;
+                                    }   
+                                };
+
+                                $(".question-number").html(`Question Number ${currentQuestion+1}`);//updates the question number
+                                $("#edit-question").val(quizzes[clickedID].questionArr[currentQuestion]);//refreshes the quiz to the next questions                               
+                                $("#edit-answer").val(quizzes[clickedID].answerArr[currentQuestion]);
+
+
+                            })
+
+                            //this function allows the user to click a button to finish editing the quiz early so they dont have to go throw all the questions
 
                             $("#save-quiz").click(function(){
                                 let question = $("#edit-question").val();
@@ -146,6 +212,8 @@ $(function(){
                                 })
                             });
                         });
+
+                        //function allowing the user to play the quiz
                         
                         $(".play-quiz").click(function(){
                             let clickedID = $(this).attr("id").replace(/\D+/g,'');
