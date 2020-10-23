@@ -40,13 +40,13 @@ $(function(){
         //the HTML for the quiz builder
 
         $("body").append(`
-            <div class="quiz-card quiz-question-builder">
+            <form class="quiz-card quiz-question-builder">
                 <h3 class="quiz-title">${quiz.title}</h3>
                 <h4 class="question-number">Question Number ${questionNumber}</h4>
                 <input type="text" placeholder="Enter your question" class="user-input" id="user-question" minlength="1">
                 <input type="text" placeholder="Enter the correct answer" class="user-input" id="user-answer" minlength="1">
-                <button class="submit-btn" id="submit-question" type="submit">Submit question</button>                
-            </div>`)
+                <button class="submit-btn" id="submit-question" type="button">Submit question</button>                
+            </form>`)
             
         //user clicks the submit button
         $("#submit-question").on('click', (function(){            
@@ -112,17 +112,17 @@ $(function(){
                             let addBtnClicked = false;
 
                             $("body").append(`
-                            <div class="game-on quiz-card" id="edit-quiz">
+                            <form class="game-on quiz-card" id="edit-quiz">
                                 <h3 class="quiz-title">${quizzes[clickedID].title}</h3>
                                 <h4 class="question-number">Question Number ${currentQuestion+1}</h4>
                                 <input type="text" value="${quizzes[clickedID].questionArr[currentQuestion]}" class="user-input" id="edit-question" minlength="1">
                                 <input type="text" value="${quizzes[clickedID].answerArr[currentQuestion]}" class="user-input" id="edit-answer" minlength="1">
                                 <button class="move-btn" id="move-right"><i class="fas fa-angle-right"></i></button>
                                 <button class="move-btn" id="move-left"><i class="fas fa-angle-left"></i></button>
-                                <button class="submit-btn" id="submit-edited-question" type="submit">Save question</button>
-                                <button class="submit-btn" id="add-new-question" type="submit">Add new question</button>
-                                <button class="finish-btn" id="save-quiz" type="submit">Save quiz</button>                
-                            </div>`);
+                                <button class="submit-btn" id="submit-edited-question" type="button">Save question</button>
+                                <button class="submit-btn" id="add-new-question" type="button">Add new question</button>
+                                <button class="finish-btn" id="save-quiz" type="button">Save quiz</button>                
+                            </form>`);
 
                             //function for moving between questions in the quiz
 
