@@ -7,22 +7,61 @@ body{
     position: relative;
 }
 
-header{
+#home-header{
     margin-top: 20px;
     margin-bottom: 40px;
     display: block;
+    background: transparent;
+    color: white;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
 }
 
+.bg-img{
+    background: url("assets/pexels-pixabay-63633.jpg") no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    text-align: center;
+    filter: blur(3px);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    display: block;
+    background-color: #333333;
+    object-fit: cover;
+}
+
+
+
+@media(max-width: 600px){
+    .bg-img{
+        background: url("assets/pexels-daria-shevtsova-3326220.jpg") no-repeat center center fixed;
+    }
+
+   
+}
 .quiz-card{
     width: 80%;
-    background-color: #1164b4;
+    background-color: rgb(29, 42, 53);
     margin: 20px auto;
     border-radius: 10px;
-    min-height: 200px;
+    min-height: 150px;
     padding: 20px;
     display: block;
     position: relative;
+    color: white;
 }
+
+.quiz-container{
+    position: relative;
+}
+
+
 
 @media (min-width: 900px){
     .quiz-card{
@@ -32,7 +71,8 @@ header{
 
 .builder-form{
     position: relative;
-    bottom: -8vh;
+
+    text-align: center;
 }
 
 .builder-form > input, button {
@@ -40,26 +80,35 @@ header{
 }
 
 @media(max-width: 400px){
-    .builder-form{
-        bottom: -5vh;
-    }
+
     .builder-form > input, button {
         margin-top: 10px;
     }
     input{
         width: 80%;
+        margin: auto;
     }
+}
+
+#user-title{
+    width: 80%;
+    margin: 10px auto;
+    text-align: center;
 }
 
 .submit-btn{
     background-color: #11b461;
     padding: 5px;
-    border: 2px solid #333333;
+    border: 2px solid #141414;
     border-radius: 10px;
+    width: 80%;
+    margin: 10px auto;
+    display: block;    
 }
 
 .quiz-question-builder{
     display: none;
+    background-color: rgb(42, 52, 61);
 }
 
 .user-input{
@@ -72,8 +121,56 @@ header{
 .finish-btn{
     background-color: #b41611;
     padding: 5px;
-    border: 2px solid #333333;
+    border: 2px solid #141414;
     border-radius: 10px;
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+}
+
+.completed-btn{
+    padding: 5px;
+    border: 2px solid #141414;
+    border-radius: 10px;
+    width: 80%;
+    margin: 10px auto;
+    display: block;
+}
+
+.move-btn{
+    position: absolute;
+    margin: auto;
+    border: none;
+    background: none;
+    color: white;
+    font-size: 3.5rem;
+}
+
+#move-right{
+    right: 3%;
+}
+
+#move-left{
+    left: 3%;
+}
+
+
+.edit-quiz, #return-home, #add-new-question{
+    background-color: rgb(197, 136, 3);
+}
+
+
+.play-quiz{
+    background-color: rgb(5, 78, 214);
+}
+
+@media(min-width: 1000px){
+    .finish-btn, .submit-btn, #user-title{
+        width: 50%;
+    }
+    .completed-btn{
+        width: 40%;
+    }
 }
 
 #user-created-quizzes{
@@ -84,3 +181,10 @@ header{
     display: none;
 }
 
+.question-number{
+    text-decoration: underline;
+}
+
+.quiz-question{
+    font-size: 2rem;
+}

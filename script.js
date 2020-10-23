@@ -1,5 +1,3 @@
-
-
 const quizzes = [];
 
 
@@ -41,7 +39,7 @@ $(function(){
         //the HTML for the quiz builder
 
         $("body").append(`
-            <div class="quiz-question-builder">
+            <div class="quiz-card quiz-question-builder">
                 <h3 class="quiz-title">${quiz.title}</h3>
                 <h4 class="question-number">Question Number ${questionNumber}</h4>
                 <input type="text" placeholder="Enter your question" class="user-input" id="user-question" minlength="1">
@@ -78,6 +76,10 @@ $(function(){
 
                 $("#submit-question").after('<button class="finish-btn" id="finish-quiz" type="submit">Finish quiz</button>')
                 $("#finish-quiz").click(function(){
+                    if ($("#user-question").val()!=="" || $("#user-answer").val()!==""){
+                        alert('You have not saved the current question!');
+                        return
+                    } 
 
                     $("#finish-quiz").remove();//remove the finish button to stop it displaying on home page
                     quizzes.push(quiz);//save the user created quiz to an array of user created quizzes
@@ -89,11 +91,14 @@ $(function(){
                             $("#user-created-quizzes").append(`
                                 <div class="quiz-card" id="${quizzes[i].title}">
                                     <h3 class="quiz-title">${quizzes[i].title}</h3>
-                                    <h4 class="num-questions" id="${i}-questions">${quizzes[i].questionArr.length} question(s)</h4>
+                                    <h4 class="num-questions" id="${i}-questions">${quizzes[i].questionArr.length} question</h4>
                                     <button class="completed-btn edit-quiz" id="${i}-edit">Edit Quiz</button>
                                     <button class="completed-btn play-quiz" id="${i}-play">Play Quiz</button>
                                 </div>
                                 `)//This for loop creates a new quiz card for each user created quiz in the current session.
+                            if (quizzes[i].questionArr.length > 1){
+                                $(".num-questions").text(`${quizzes[i].questionArr.length} questions`)
+                            }
                         };
                         frontPageElements.fadeIn(400);
                                                    
@@ -114,7 +119,7 @@ $(function(){
                                 <button class="move-btn" id="move-right"><i class="fas fa-angle-right"></i></button>
                                 <button class="move-btn" id="move-left"><i class="fas fa-angle-left"></i></button>
                                 <button class="submit-btn" id="submit-edited-question" type="submit">Save question</button>
-                                <button class="add-btn" id="add-new-question" type="submit">Add new question</button>
+                                <button class="submit-btn" id="add-new-question" type="submit">Add new question</button>
                                 <button class="finish-btn" id="save-quiz" type="submit">Save quiz</button>                
                             </div>`);
 
@@ -165,7 +170,7 @@ $(function(){
                                     if (currentQuestion === quizzes[clickedID].questionArr.length){
                                         $(".game-on").empty().append(`
                                         <p class="user-score">You have finished editing the quiz</p>
-                                        <button class="guess-btn" id="return-home" type="submit">Return Home</button>`)
+                                        <button class="completed-btn" id="return-home" type="submit">Return Home</button>`)
                                         $("#return-home").click(function(){
                                             $(".game-on").fadeOut(400, function(){
                                                 frontPageElements.fadeIn(400);
@@ -260,7 +265,7 @@ $(function(){
                                     <h4 class="question-number">Question Number ${currentQuestion +1}</h4>
                                     <p class="quiz-question">${quizzes[clickedID].questionArr[currentQuestion]}?</p>
                                     <input type="text" placeholder="Enter the your guess" class="user-input" id="play-answer">
-                                    <button class="guess-btn" id="submit-guess" type="submit">Go!</button>
+                                    <button class="guess-btn submit-btn" id="submit-guess" type="submit">Go!</button>
                                     <p class="user-score">Current Score: ${userScore}/${quizzes[clickedID].questionArr.length}</p>                
                                 </div>`)
                             frontPageElements.fadeOut(400, function(){
@@ -284,7 +289,7 @@ $(function(){
                                 if (currentQuestion === quizzes[clickedID].questionArr.length){
                                     $(".game-on").empty().append(`
                                     <p class="user-score">You scored: ${userScore}/${quizzes[clickedID].questionArr.length}!</p>
-                                    <button class="guess-btn" id="return-home" type="submit">Return Home</button>`)
+                                    <button class="completed-btn" id="return-home" type="submit">Return Home</button>`)
                                     $("#return-home").click(function(){
                                         $(".game-on").fadeOut(400, function(){
                                             frontPageElements.fadeIn(400);
@@ -295,7 +300,7 @@ $(function(){
 
                                 $(".question-number").html(`Question Number ${currentQuestion +1}`)
                                 $(".quiz-question").html(`${quizzes[clickedID].questionArr[currentQuestion]}?`)
-                                $(".user-score").html(`Final Score: ${userScore}/${quizzes[clickedID].questionArr.length}`)  
+                                  
 
                             });
 
