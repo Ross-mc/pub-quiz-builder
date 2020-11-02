@@ -17,3 +17,7 @@ As part of an application for a software development job, I was tasked with crea
 2. CSS.
 3. JavaScript (optional jQuery).
 4. MySQL or PHP for backend.
+
+### Footnote
+
+This repository is defunct. A completed refactored version redesigned as a full stack web application using Node.js and Express.js is available (see [here](https://github.com/Ross-mc/pub-quiz-app)).
